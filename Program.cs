@@ -1,10 +1,14 @@
 using LibraryBlazor.Components;
+using LibraryBlazor.Entity.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<LibraryDbContext>();
 
 var app = builder.Build();
 
