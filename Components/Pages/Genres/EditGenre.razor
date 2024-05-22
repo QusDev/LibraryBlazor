@@ -1,0 +1,48 @@
+﻿@page "/genres/edit/{Id:int}"
+@inject IGenreService genreService
+@inject NavigationManager navigationManager
+
+@if (Genre == null)
+{
+    <p><em>Not Found Genre with Id: @Id</em></p>
+}
+else
+{
+    <h1>Edit genre</h1>
+
+    <EditForm Model="Genre" FormName="editGenre" OnValidSubmit="@OnFormSubmitAsync">
+        <DataAnnotationsValidator />
+
+        <div class="form-group mb-3">
+            <label>Name</label>
+            <InputText @bind-Value=Genre.Name class="form-control" placeholder="Enter name">@Genre.Name</InputText>
+            <ValidationMessage For="@(() => Genre.Name)" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <NavLink href="/genres"><button type="button" class="btn btn-danger">Cancel</button></NavLink>
+        </div>
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Genre Genre { get; set; } = new Genre() { Name = string.Empty };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Genre = await genreService.GetAsync(Id);
+    }
+
+    public async Task OnFormSubmitAsync()
+    {
+        await genreService.UpdateAsync(Id, Genre);
+        navigationManager.NavigateTo("/genres");
+    }
+}
+

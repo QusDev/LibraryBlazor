@@ -34,7 +34,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("Books_Authors");
+                    b.ToTable("Books_Authors", (string)null);
                 });
 
             modelBuilder.Entity("Books_Genres", b =>
@@ -49,7 +49,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasIndex("GenresId");
 
-                    b.ToTable("Books_Genres");
+                    b.ToTable("Books_Genres", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBlazor.Entities.Author", b =>
@@ -70,7 +70,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBlazor.Entities.Book", b =>
@@ -96,7 +96,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBlazor.Entities.Genre", b =>
@@ -113,7 +113,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBlazor.Entities.Issue", b =>
@@ -147,7 +147,7 @@ namespace LibraryBlazor.Migrations
                     b.HasIndex("ReaderId")
                         .IsUnique();
 
-                    b.ToTable("Issues");
+                    b.ToTable("Issues", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBlazor.Entities.Reader", b =>
@@ -176,7 +176,7 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Readers");
+                    b.ToTable("Readers", (string)null);
                 });
 
             modelBuilder.Entity("Books_Authors", b =>

@@ -1,6 +1,6 @@
 using LibraryBlazor.Components;
 using LibraryBlazor.Entity.DbContexts;
-using Microsoft.EntityFrameworkCore;
+using LibraryBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<LibraryDbContext>();
+
+builder.Services.AddScoped<ILibraryDbContext, LibraryDbContext>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+
 
 var app = builder.Build();
 
@@ -24,6 +28,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

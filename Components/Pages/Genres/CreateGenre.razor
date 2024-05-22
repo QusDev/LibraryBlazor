@@ -1,0 +1,32 @@
+﻿@page "/genres/create";
+@inject IGenreService genreService;
+@inject NavigationManager navigationManager;
+
+<h2 class="mb-3">Create genre</h2>
+
+<EditForm Model="Genre" FormName="createGenre" OnValidSubmit="@OnFormSubmitAsync">
+    <DataAnnotationsValidator/>
+
+    <div class="form-group mb-3">
+        <label>Name</label>
+        <InputText @bind-Value=Genre.Name class="form-control" placeholder="Enter name">@Genre.Name</InputText>
+        <ValidationMessage For="@(() => Genre.Name)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Submit</button>
+        <NavLink href="/genres"><button type="button" class="btn btn-danger">Cancel</button></NavLink>
+    </div>
+
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Genre Genre { get; set; } = new Genre() { Name = string.Empty };
+
+    public async Task OnFormSubmitAsync()
+    {
+        await genreService.AddAsync(Genre);
+        navigationManager.NavigateTo("/genres");
+    }
+}

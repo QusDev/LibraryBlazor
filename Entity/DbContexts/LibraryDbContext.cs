@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryBlazor.Entity.DbContexts
 {
-    public class LibraryDbContext : DbContext
+    public class LibraryDbContext : DbContext, ILibraryDbContext
     {
         private readonly IConfiguration _configuration;
         public DbSet<Book> Books { get; set; }
@@ -21,7 +21,7 @@ namespace LibraryBlazor.Entity.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+           optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +32,11 @@ namespace LibraryBlazor.Entity.DbContexts
             modelBuilder.ApplyConfiguration(new IssueConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }
