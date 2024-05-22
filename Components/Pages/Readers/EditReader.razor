@@ -1,0 +1,65 @@
+﻿@page "/readers/edit/{Id:int}";
+@inject IReaderService readerService;
+@inject NavigationManager navigationManager;
+
+<h2 class="mb-3">Create reader</h2>
+
+@if (Reader == null)
+{
+    <p><em>Not found reader with id: @Id</em></p>
+}
+else
+{
+    <EditForm Model="Reader" FormName="createReader" OnValidSubmit="@OnFormSubmitAsync">
+        <DataAnnotationsValidator />
+
+        <div class="form-group mb-3">
+            <label>First Name</label>
+            <InputText @bind-Value=Reader.FirstName class="form-control" placeholder="Enter first name">@Reader.FirstName</InputText>
+            <ValidationMessage For="@(() => Reader.FirstName)" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Last Name</label>
+            <InputText @bind-Value=Reader.LastName class="form-control" placeholder="Enter last name">@Reader.LastName</InputText>
+            <ValidationMessage For="@(() => Reader.LastName)" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Email</label>
+            <InputText @bind-Value=Reader.Email class="form-control" placeholder="Enter email">@Reader.Email</InputText>
+            <ValidationMessage For="@(() => Reader.Email)" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Phone</label>
+            <InputText @bind-Value=Reader.PhoneNumber class="form-control" placeholder="Enter phone number">@Reader.PhoneNumber</InputText>
+            <ValidationMessage For="@(() => Reader.PhoneNumber)" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <NavLink href="/readers"><button type="button" class="btn btn-danger">Cancel</button></NavLink>
+        </div>
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Reader Reader { get; set; } = new Reader();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Reader = await readerService.GetAsync(Id);
+    }
+
+    public async Task OnFormSubmitAsync()
+    {
+        await readerService.UpdateAsync(Id, Reader);
+        navigationManager.NavigateTo("/readers");
+    }
+}

@@ -15,6 +15,7 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IIsueService, IssueService>();
+builder.Services.AddScoped<IReaderService, ReaderService>();
 
 
 var app = builder.Build();

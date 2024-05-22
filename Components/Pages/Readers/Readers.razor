@@ -1,0 +1,67 @@
+﻿@page "/readers"
+@inject IReaderService readerService;
+@inject NavigationManager navigationManager;
+
+@if (readers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <NavLink class="nav-link" href="/readers/create">
+        <button class="btn btn-primary">Create Reader</button>
+    </NavLink>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reader in readers)
+            {
+                <tr score="row">
+                    <td>@reader.Id</td>
+                    <td>@reader.FirstName</td>
+                    <td>@reader.LastName</td>
+                    <td>@reader.Email</td>
+                    <td>@reader.PhoneNumber</td>
+                    <td>
+                        <div class="mb-0">
+                            <button class="btn btn-primary" @onclick="@(() => OnUpdate(reader.Id))">Update</button>
+                            <button class="btn btn-danger" @onclick="@(() => OnDelete(reader.Id))">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Reader> readers = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        readers = await readerService.GetAllAsync();
+    }
+
+    public async Task OnDelete(int readerId)
+    {
+        await readerService.DeleteAsync(readerId);
+        readers = await readerService.GetAllAsync();
+    }
+
+    public void OnUpdate(int readerId)
+    {
+        navigationManager.NavigateTo($"/readers/edit/{readerId}");
+    }
+
+}
