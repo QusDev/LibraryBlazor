@@ -12,6 +12,9 @@ builder.Services.AddDbContext<LibraryDbContext>();
 
 builder.Services.AddScoped<ILibraryDbContext, LibraryDbContext>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IIsueService, IssueService>();
 
 
 var app = builder.Build();
