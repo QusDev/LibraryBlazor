@@ -19,7 +19,7 @@ namespace LibraryBlazor.Entity.Entities
         [Required]
         public bool available { get; set; }
 
-        public List<Author> Authors { get; } = [];
-        public List<Genre> Genres { get; } = [];
+        public List<Author> Authors { get; set; } = [];
+        public List<Genre> Genres { get; set; } = [];
     }
 }
