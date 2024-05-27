@@ -12,6 +12,8 @@ namespace LibraryBlazor.Entity.DbContexts
         public DbSet<Author> Authors { get; set; }
         public DbSet<Reader> Readers { get; set; }
         public DbSet<Issue> Issues { get; set; }
+        public DbSet<BookGenre> BookGenres { get; set; }
+        public DbSet<BookAuthor> BookAuthors { get; set; }
 
         public LibraryDbContext(IConfiguration configuration)
         {

@@ -11,13 +11,13 @@ namespace LibraryBlazor.Entity.Entities
         public string Title { get; set; } = null!;
 
         [Required]
-        public DateTime publication_year { get; set; }
+        public DateTime Publication_year { get; set; }
 
         [Required]
         public int CountPage { get; set; }
 
         [Required]
-        public bool available { get; set; }
+        public bool Available { get; set; }
 
         public List<Author> Authors { get; set; } = [];
         public List<Genre> Genres { get; set; } = [];
