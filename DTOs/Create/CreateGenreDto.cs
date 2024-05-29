@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibraryBlazor.Entity.Entities
+namespace LibraryBlazor.DTOs.Create
 {
-    public class Genre
+    public class CreateGenreDto
     {
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; } = null!;
-
-        public List<Book> Books { get; } = [];
     }
 }

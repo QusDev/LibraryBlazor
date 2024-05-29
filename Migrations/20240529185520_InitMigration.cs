@@ -40,9 +40,9 @@ namespace LibraryBlazor.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    publication_year = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Publication_year = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CountPage = table.Column<int>(type: "int", nullable: false),
-                    available = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Available = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,24 +87,24 @@ namespace LibraryBlazor.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Books_Authors",
+                name: "BookAuthors",
                 columns: table => new
                 {
-                    AuthorsId = table.Column<int>(type: "int", nullable: false),
-                    BooksId = table.Column<int>(type: "int", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books_Authors", x => new { x.AuthorsId, x.BooksId });
+                    table.PrimaryKey("PK_BookAuthors", x => new { x.AuthorId, x.BookId });
                     table.ForeignKey(
-                        name: "FK_Books_Authors_Authors_AuthorsId",
-                        column: x => x.AuthorsId,
+                        name: "FK_BookAuthors_Authors_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_Books_BooksId",
-                        column: x => x.BooksId,
+                        name: "FK_BookAuthors_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -112,24 +112,24 @@ namespace LibraryBlazor.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Books_Genres",
+                name: "BookGenres",
                 columns: table => new
                 {
-                    BooksId = table.Column<int>(type: "int", nullable: false),
-                    GenresId = table.Column<int>(type: "int", nullable: false)
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books_Genres", x => new { x.BooksId, x.GenresId });
+                    table.PrimaryKey("PK_BookGenres", x => new { x.BookId, x.GenreId });
                     table.ForeignKey(
-                        name: "FK_Books_Genres_Books_BooksId",
-                        column: x => x.BooksId,
+                        name: "FK_BookGenres_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Genres_Genres_GenresId",
-                        column: x => x.GenresId,
+                        name: "FK_BookGenres_Genres_GenreId",
+                        column: x => x.GenreId,
                         principalTable: "Genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -167,36 +167,34 @@ namespace LibraryBlazor.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Authors_BooksId",
-                table: "Books_Authors",
-                column: "BooksId");
+                name: "IX_BookAuthors_BookId",
+                table: "BookAuthors",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Genres_GenresId",
-                table: "Books_Genres",
-                column: "GenresId");
+                name: "IX_BookGenres_GenreId",
+                table: "BookGenres",
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Issues_BookId",
                 table: "Issues",
-                column: "BookId",
-                unique: true);
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Issues_ReaderId",
                 table: "Issues",
-                column: "ReaderId",
-                unique: true);
+                column: "ReaderId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books_Authors");
+                name: "BookAuthors");
 
             migrationBuilder.DropTable(
-                name: "Books_Genres");
+                name: "BookGenres");
 
             migrationBuilder.DropTable(
                 name: "Issues");

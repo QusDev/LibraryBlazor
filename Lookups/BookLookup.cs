@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LibraryBlazor.Entity.Entities;
 
-namespace LibraryBlazor.Entity.Entities
+namespace LibraryBlazor.Lookups
 {
-    public class Book
+    public class BookLookup
     {
         public int Id { get; set; }
 
@@ -14,7 +14,7 @@ namespace LibraryBlazor.Entity.Entities
 
         public bool Available { get; set; }
 
-        public List<Author> Authors { get; set; } = [];
-        public List<Genre> Genres { get; set; } = [];
+        public List<AuthorLookup> Authors { get; set; } = [];
+        public List<GenreLookup> Genres { get; set; } = [];
     }
 }

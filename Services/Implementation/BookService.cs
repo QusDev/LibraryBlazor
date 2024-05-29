@@ -1,8 +1,9 @@
 ﻿using LibraryBlazor.Entity.DbContexts;
 using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryBlazor.Services
+namespace LibraryBlazor.Services.Implementation
 {
     public class BookService : IBookService
     {
@@ -37,13 +38,13 @@ namespace LibraryBlazor.Services
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
         }
 
-        public async Task<List<Book>> GetAllAsync() => await _libraryDbContext.Books.ToListAsync();
+        public async Task<List<Book>> GetAllAsync() => await _libraryDbContext.Books.Include(b => b.Genres).Include(b => b.Authors).ToListAsync();
 
-        public async Task<Book?> GetAsync(int id) => await _libraryDbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Book?> GetAsync(int id) => await _libraryDbContext.Books.Include(b => b.Genres).Include(b => b.Authors).FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task UpdateAsync(int id, Book entity)
         {
-            var book = await _libraryDbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+            var book = await _libraryDbContext.Books.Include(b => b.Genres).Include(b => b.Authors).FirstOrDefaultAsync(x => x.Id == id);
 
             if (book is null)
             {
@@ -51,13 +52,15 @@ namespace LibraryBlazor.Services
             }
 
             book.Title = entity.Title;
-            book.publication_year = entity.publication_year;
+            book.Publication_year = entity.Publication_year;
             book.CountPage = entity.CountPage;
-            book.available = entity.available;
-            book.Authors = entity.Authors;
+            book.Available = entity.Available;
             book.Genres = entity.Genres;
+            book.Authors = entity.Authors;
 
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
         }
+
+
     }
 }

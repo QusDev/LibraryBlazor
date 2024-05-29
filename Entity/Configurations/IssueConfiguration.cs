@@ -13,13 +13,13 @@ namespace LibraryBlazor.Entity.Configurations
 
             builder
                 .HasOne(i => i.Reader)
-                .WithOne()
-                .HasForeignKey<Issue>(i => i.ReaderId);
+                .WithMany()
+                .HasForeignKey(i => i.ReaderId);
 
             builder
                 .HasOne(i => i.Book)
-                .WithOne()
-                .HasForeignKey<Issue>(i => i.BookId);
+                .WithMany()
+                .HasForeignKey(i => i.BookId);
         }
     }
 }

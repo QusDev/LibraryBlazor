@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LibraryBlazor.Entity.Entities
+﻿namespace LibraryBlazor.Lookups
 {
-    public class Reader
+    public class ReaderLookup
     {
         public int Id { get; set; }
 

@@ -1,8 +1,9 @@
 ﻿using LibraryBlazor.Entity.DbContexts;
 using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryBlazor.Services
+namespace LibraryBlazor.Services.Implementation
 {
     public class IssueService : IIsueService
     {
@@ -19,7 +20,6 @@ namespace LibraryBlazor.Services
             {
                 return;
             }
-
 
             _libraryDbContext.Issues.Add(entity);
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
@@ -38,7 +38,7 @@ namespace LibraryBlazor.Services
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
         }
 
-        public async Task<List<Issue>> GetAllAsync() => await _libraryDbContext.Issues.ToListAsync();
+        public async Task<List<Issue>> GetAllAsync() => await _libraryDbContext.Issues.Include(i => i.Reader).Include(i => i.Book).ToListAsync();
 
         public async Task<Issue?> GetAsync(int id) => await _libraryDbContext.Issues.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -54,7 +54,7 @@ namespace LibraryBlazor.Services
             issue.IssueDate = entity.IssueDate;
             issue.ReturnDate = entity.ReturnDate;
             issue.Returned = entity.Returned;
-            issue.BookId  = entity.BookId;
+            issue.BookId = entity.BookId;
             issue.ReaderId = entity.ReaderId;
 
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);

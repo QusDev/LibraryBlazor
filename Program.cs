@@ -1,6 +1,7 @@
 using LibraryBlazor.Components;
 using LibraryBlazor.Entity.DbContexts;
-using LibraryBlazor.Services;
+using LibraryBlazor.Services.Implementation;
+using LibraryBlazor.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ builder.Services.AddDbContext<LibraryDbContext>();
 
 builder.Services.AddScoped<ILibraryDbContext, LibraryDbContext>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IIsueService, IssueService>();
+builder.Services.AddScoped<IReaderService, ReaderService>();
 
 
 var app = builder.Build();

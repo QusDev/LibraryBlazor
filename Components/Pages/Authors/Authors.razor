@@ -1,0 +1,73 @@
+﻿@page "/authors"
+@inject IAuthorService authorService;
+@inject NavigationManager navigationManager;
+
+@if (authorListDto.Authors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <NavLink class="nav-link" href="/authors/create">
+        <button class="btn btn-primary">Create Author</button>
+    </NavLink>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in authorListDto.Authors)
+            {
+                <tr score="row">
+                    <td>@author.Id</td>
+                    <td>@author.FirstName</td>
+                    <td>@author.LastName</td>
+                    <td>
+                        <div class="mb-0">
+                            <button class="btn btn-primary" @onclick="@(() => OnUpdate(author.Id))">Update</button>
+                            <button class="btn btn-danger" @onclick="@(() => OnDelete(author.Id))">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private AuthorListDto authorListDto = new AuthorListDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        authorListDto.Authors = (await authorService.GetAllAsync()).Select(a => new AuthorLookup()
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToList();
+    }
+
+    public async Task OnDelete(int authorId)
+    {
+        await authorService.DeleteAsync(authorId);
+        authorListDto.Authors = (await authorService.GetAllAsync()).Select(a => new AuthorLookup()
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToList();
+    }
+
+    public void OnUpdate(int authorId)
+    {
+        navigationManager.NavigateTo($"/authors/edit/{authorId}");
+    }
+
+}

@@ -1,8 +1,9 @@
 ﻿using LibraryBlazor.Entity.DbContexts;
 using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryBlazor.Services
+namespace LibraryBlazor.Services.Implementation
 {
     public class GenreService : IGenreService
     {
@@ -49,7 +50,7 @@ namespace LibraryBlazor.Services
         public async Task UpdateAsync(int id, Genre entity)
         {
             var genre = await _libraryDbContext.Genres.FirstOrDefaultAsync(x => x.Id == id);
-            
+
             if (genre is null)
             {
                 return;

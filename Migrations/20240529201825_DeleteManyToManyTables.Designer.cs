@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryBlazor.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20240513232721_InitMigration")]
-    partial class InitMigration
+    [Migration("20240529201825_DeleteManyToManyTables")]
+    partial class DeleteManyToManyTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace LibraryBlazor.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Books_Authors", b =>
+            modelBuilder.Entity("BookAuthors", b =>
                 {
                     b.Property<int>("AuthorsId")
                         .HasColumnType("int");
@@ -37,10 +37,10 @@ namespace LibraryBlazor.Migrations
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("Books_Authors");
+                    b.ToTable("BookAuthors");
                 });
 
-            modelBuilder.Entity("Books_Genres", b =>
+            modelBuilder.Entity("BookGenres", b =>
                 {
                     b.Property<int>("BooksId")
                         .HasColumnType("int");
@@ -52,10 +52,10 @@ namespace LibraryBlazor.Migrations
 
                     b.HasIndex("GenresId");
 
-                    b.ToTable("Books_Genres");
+                    b.ToTable("BookGenres");
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Author", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,7 +76,7 @@ namespace LibraryBlazor.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Book", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,25 +84,25 @@ namespace LibraryBlazor.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Available")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("CountPage")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Publication_year")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<bool>("available")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("publication_year")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Genre", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Genre", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace LibraryBlazor.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Issue", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Issue", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,16 +144,14 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId")
-                        .IsUnique();
+                    b.HasIndex("BookId");
 
-                    b.HasIndex("ReaderId")
-                        .IsUnique();
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("Issues");
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Reader", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Reader", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,47 +180,47 @@ namespace LibraryBlazor.Migrations
                     b.ToTable("Readers");
                 });
 
-            modelBuilder.Entity("Books_Authors", b =>
+            modelBuilder.Entity("BookAuthors", b =>
                 {
-                    b.HasOne("LibraryBlazor.Entities.Author", null)
+                    b.HasOne("LibraryBlazor.Entity.Entities.Author", null)
                         .WithMany()
                         .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryBlazor.Entities.Book", null)
+                    b.HasOne("LibraryBlazor.Entity.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Books_Genres", b =>
+            modelBuilder.Entity("BookGenres", b =>
                 {
-                    b.HasOne("LibraryBlazor.Entities.Book", null)
+                    b.HasOne("LibraryBlazor.Entity.Entities.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryBlazor.Entities.Genre", null)
+                    b.HasOne("LibraryBlazor.Entity.Entities.Genre", null)
                         .WithMany()
                         .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryBlazor.Entities.Issue", b =>
+            modelBuilder.Entity("LibraryBlazor.Entity.Entities.Issue", b =>
                 {
-                    b.HasOne("LibraryBlazor.Entities.Book", "Book")
-                        .WithOne()
-                        .HasForeignKey("LibraryBlazor.Entities.Issue", "BookId")
+                    b.HasOne("LibraryBlazor.Entity.Entities.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryBlazor.Entities.Reader", "Reader")
-                        .WithOne()
-                        .HasForeignKey("LibraryBlazor.Entities.Issue", "ReaderId")
+                    b.HasOne("LibraryBlazor.Entity.Entities.Reader", "Reader")
+                        .WithMany()
+                        .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

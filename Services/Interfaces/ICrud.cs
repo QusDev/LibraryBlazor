@@ -1,4 +1,4 @@
-﻿namespace LibraryBlazor.Services
+﻿namespace LibraryBlazor.Services.Interfaces
 {
     public interface ICrud<T>
     {
