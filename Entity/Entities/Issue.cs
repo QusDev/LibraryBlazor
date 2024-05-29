@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace LibraryBlazor.Entity.Entities
 {
     public class Issue

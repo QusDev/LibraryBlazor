@@ -4,7 +4,6 @@ using LibraryBlazor.Entity.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryBlazor.Migrations
 {
     [DbContext(typeof(LibraryDbContext))]
-    [Migration("20240527132421_AddManyToManyTables")]
-    partial class AddManyToManyTables
+    partial class LibraryDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,11 +141,9 @@ namespace LibraryBlazor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId")
-                        .IsUnique();
+                    b.HasIndex("BookId");
 
-                    b.HasIndex("ReaderId")
-                        .IsUnique();
+                    b.HasIndex("ReaderId");
 
                     b.ToTable("Issues");
                 });
@@ -215,14 +210,14 @@ namespace LibraryBlazor.Migrations
             modelBuilder.Entity("LibraryBlazor.Entity.Entities.Issue", b =>
                 {
                     b.HasOne("LibraryBlazor.Entity.Entities.Book", "Book")
-                        .WithOne()
-                        .HasForeignKey("LibraryBlazor.Entity.Entities.Issue", "BookId")
+                        .WithMany()
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LibraryBlazor.Entity.Entities.Reader", "Reader")
-                        .WithOne()
-                        .HasForeignKey("LibraryBlazor.Entity.Entities.Issue", "ReaderId")
+                        .WithMany()
+                        .HasForeignKey("ReaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
