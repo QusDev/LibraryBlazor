@@ -1,9 +1,10 @@
 ﻿using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Lookups;
 
 namespace LibraryBlazor.DTOs.List
 {
     public class BookListDto
     {
-        public List<Book> Books { get; set; } = null!;
+        public List<BookLookup> Books { get; set; } = null!;
     }
 }
