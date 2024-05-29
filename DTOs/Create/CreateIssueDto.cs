@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryBlazor.DTOs.Create
 {

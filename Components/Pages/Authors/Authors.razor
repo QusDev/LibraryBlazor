@@ -1,8 +1,10 @@
 ﻿@page "/authors"
+@using LibraryBlazor.DTOs.List
+@using LibraryBlazor.Lookups
 @inject IAuthorService authorService;
 @inject NavigationManager navigationManager;
 
-@if (authors == null)
+@if (authorListDto.Authors == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -22,7 +24,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var author in authors)
+            @foreach (var author in authorListDto.Authors)
             {
                 <tr score="row">
                     <td>@author.Id</td>
@@ -42,17 +44,27 @@ else
 
 
 @code {
-    private List<Author> authors = null!;
+    private AuthorListDto authorListDto = new AuthorListDto();
 
     protected override async Task OnInitializedAsync()
     {
-        authors = await authorService.GetAllAsync();
+        authorListDto.Authors = (await authorService.GetAllAsync()).Select(a => new AuthorLookup()
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToList();
     }
 
     public async Task OnDelete(int authorId)
     {
         await authorService.DeleteAsync(authorId);
-        authors = await authorService.GetAllAsync();
+        authorListDto.Authors = (await authorService.GetAllAsync()).Select(a => new AuthorLookup()
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToList();
     }
 
     public void OnUpdate(int authorId)

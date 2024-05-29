@@ -1,9 +1,9 @@
-﻿using LibraryBlazor.Entity.Entities;
+﻿using LibraryBlazor.Lookups;
 
 namespace LibraryBlazor.DTOs.List
 {
     public class IssueListDto
     {
-        public List<Issue> Issues { get; set; } = null!;
+        public List<IssueLookup> Issues { get; set; } = null!;
     }
 }

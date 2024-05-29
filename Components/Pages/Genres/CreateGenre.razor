@@ -1,16 +1,17 @@
 ﻿@page "/genres/create";
+@using LibraryBlazor.DTOs.Create
 @inject IGenreService genreService;
 @inject NavigationManager navigationManager;
 
 <h2 class="mb-3">Create genre</h2>
 
-<EditForm Model="Genre" FormName="createGenre" OnValidSubmit="@OnFormSubmitAsync">
-    <DataAnnotationsValidator/>
+<EditForm Model="CreateGenreModel" FormName="createGenre" OnValidSubmit="@OnFormSubmitAsync">
+    <DataAnnotationsValidator />
 
     <div class="form-group mb-3">
         <label>Name</label>
-        <InputText @bind-Value=Genre.Name class="form-control" placeholder="Enter name">@Genre.Name</InputText>
-        <ValidationMessage For="@(() => Genre.Name)" />
+        <InputText @bind-Value=CreateGenreModel.Name class="form-control" placeholder="Enter name">@CreateGenreModel.Name</InputText>
+        <ValidationMessage For="@(() => CreateGenreModel.Name)" />
     </div>
 
     <div class="form-group">
@@ -22,11 +23,17 @@
 
 @code {
     [SupplyParameterFromForm]
-    public Genre Genre { get; set; } = new Genre() { Name = string.Empty };
+    public CreateGenreDto CreateGenreModel { get; set; } = new CreateGenreDto();
 
     public async Task OnFormSubmitAsync()
     {
-        await genreService.AddAsync(Genre);
+        var genre = new Genre()
+            {
+                Name = CreateGenreModel.Name
+            };
+
+        await genreService.AddAsync(genre);
+
         navigationManager.NavigateTo("/genres");
     }
 }

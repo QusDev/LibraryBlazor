@@ -1,8 +1,10 @@
 ﻿@page "/readers"
+@using LibraryBlazor.DTOs.List
+@using LibraryBlazor.Lookups
 @inject IReaderService readerService;
 @inject NavigationManager navigationManager;
 
-@if (readers == null)
+@if (readerListDto.Readers == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -24,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var reader in readers)
+            @foreach (var reader in readerListDto.Readers)
             {
                 <tr score="row">
                     <td>@reader.Id</td>
@@ -46,17 +48,32 @@ else
 
 
 @code {
-    private List<Reader> readers = null!;
+    private ReaderListDto readerListDto = new ReaderListDto();
 
     protected override async Task OnInitializedAsync()
     {
-        readers = await readerService.GetAllAsync();
+        readerListDto.Readers = (await readerService.GetAllAsync()).Select(r => new ReaderLookup()
+            {
+                Id = r.Id,
+                FirstName = r.FirstName,
+                LastName = r.LastName,
+                Email = r.Email,
+                PhoneNumber = r.PhoneNumber
+            }).ToList();
     }
 
     public async Task OnDelete(int readerId)
     {
         await readerService.DeleteAsync(readerId);
-        readers = await readerService.GetAllAsync();
+
+        readerListDto.Readers = (await readerService.GetAllAsync()).Select(r => new ReaderLookup()
+            {
+                Id = r.Id,
+                FirstName = r.FirstName,
+                LastName = r.LastName,
+                Email = r.Email,
+                PhoneNumber = r.PhoneNumber
+            }).ToList();
     }
 
     public void OnUpdate(int readerId)

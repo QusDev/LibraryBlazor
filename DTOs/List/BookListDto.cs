@@ -1,5 +1,4 @@
-﻿using LibraryBlazor.Entity.Entities;
-using LibraryBlazor.Lookups;
+﻿using LibraryBlazor.Lookups;
 
 namespace LibraryBlazor.DTOs.List
 {

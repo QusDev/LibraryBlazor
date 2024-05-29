@@ -1,40 +1,41 @@
 ﻿@page "/readers/edit/{Id:int}";
+@using LibraryBlazor.DTOs.Create
 @inject IReaderService readerService;
 @inject NavigationManager navigationManager;
 
 <h2 class="mb-3">Create reader</h2>
 
-@if (Reader == null)
+@if (CreateReaderModel == null)
 {
     <p><em>Not found reader with id: @Id</em></p>
 }
 else
 {
-    <EditForm Model="Reader" FormName="createReader" OnValidSubmit="@OnFormSubmitAsync">
+    <EditForm Model="CreateReaderModel" FormName="createReader" OnValidSubmit="@OnFormSubmitAsync">
         <DataAnnotationsValidator />
 
         <div class="form-group mb-3">
             <label>First Name</label>
-            <InputText @bind-Value=Reader.FirstName class="form-control" placeholder="Enter first name">@Reader.FirstName</InputText>
-            <ValidationMessage For="@(() => Reader.FirstName)" />
+            <InputText @bind-Value=CreateReaderModel.FirstName class="form-control" placeholder="Enter first name">@CreateReaderModel.FirstName</InputText>
+            <ValidationMessage For="@(() => CreateReaderModel.FirstName)" />
         </div>
 
         <div class="form-group mb-3">
             <label>Last Name</label>
-            <InputText @bind-Value=Reader.LastName class="form-control" placeholder="Enter last name">@Reader.LastName</InputText>
-            <ValidationMessage For="@(() => Reader.LastName)" />
+            <InputText @bind-Value=CreateReaderModel.LastName class="form-control" placeholder="Enter last name">@CreateReaderModel.LastName</InputText>
+            <ValidationMessage For="@(() => CreateReaderModel.LastName)" />
         </div>
 
         <div class="form-group mb-3">
             <label>Email</label>
-            <InputText @bind-Value=Reader.Email class="form-control" placeholder="Enter email">@Reader.Email</InputText>
-            <ValidationMessage For="@(() => Reader.Email)" />
+            <InputText @bind-Value=CreateReaderModel.Email class="form-control" placeholder="Enter email">@CreateReaderModel.Email</InputText>
+            <ValidationMessage For="@(() => CreateReaderModel.Email)" />
         </div>
 
         <div class="form-group mb-3">
             <label>Phone</label>
-            <InputText @bind-Value=Reader.PhoneNumber class="form-control" placeholder="Enter phone number">@Reader.PhoneNumber</InputText>
-            <ValidationMessage For="@(() => Reader.PhoneNumber)" />
+            <InputText @bind-Value=CreateReaderModel.PhoneNumber class="form-control" placeholder="Enter phone number">@CreateReaderModel.PhoneNumber</InputText>
+            <ValidationMessage For="@(() => CreateReaderModel.PhoneNumber)" />
         </div>
 
         <div class="form-group">
@@ -50,16 +51,39 @@ else
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Reader Reader { get; set; } = new Reader();
+    public CreateReaderDto CreateReaderModel { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
-        Reader = await readerService.GetAsync(Id);
+        var reader = await readerService.GetAsync(Id);
+
+        if (reader == null)
+        {
+            return;
+        }
+
+        CreateReaderModel = new CreateReaderDto()
+            {
+                Id = reader.Id,
+                FirstName = reader.FirstName,
+                LastName = reader.LastName,
+                Email = reader.Email,
+                PhoneNumber = reader.PhoneNumber
+            };
     }
 
     public async Task OnFormSubmitAsync()
     {
-        await readerService.UpdateAsync(Id, Reader);
+        var reader = new Reader()
+            {
+                Id = CreateReaderModel.Id,
+                FirstName = CreateReaderModel.FirstName,
+                LastName = CreateReaderModel.LastName,
+                Email = CreateReaderModel.Email,
+                PhoneNumber = CreateReaderModel.PhoneNumber
+            };
+
+        await readerService.UpdateAsync(Id, reader);
         navigationManager.NavigateTo("/readers");
     }
 }

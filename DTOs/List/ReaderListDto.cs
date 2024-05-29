@@ -1,9 +1,9 @@
-﻿using LibraryBlazor.Entity.Entities;
+﻿using LibraryBlazor.Lookups;
 
 namespace LibraryBlazor.DTOs.List
 {
     public class ReaderListDto
     {
-        public List<Reader> Readers { get; set; } = null!;
+        public List<ReaderLookup> Readers { get; set; } = null!;
     }
 }

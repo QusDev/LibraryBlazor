@@ -1,8 +1,10 @@
 ﻿@page "/genres/edit/{Id:int}"
+@using LibraryBlazor.DTOs.Create
+@using LibraryBlazor.DTOs.List
 @inject IGenreService genreService
 @inject NavigationManager navigationManager
 
-@if (Genre == null)
+@if (CreateGenreModel == null)
 {
     <p><em>Not found genre with id: @Id</em></p>
 }
@@ -10,13 +12,13 @@ else
 {
     <h1>Edit genre</h1>
 
-    <EditForm Model="Genre" FormName="editGenre" OnValidSubmit="@OnFormSubmitAsync">
+    <EditForm Model="CreateGenreModel" FormName="editGenre" OnValidSubmit="@OnFormSubmitAsync">
         <DataAnnotationsValidator />
 
         <div class="form-group mb-3">
             <label>Name</label>
-            <InputText @bind-Value=Genre.Name class="form-control" placeholder="Enter name">@Genre.Name</InputText>
-            <ValidationMessage For="@(() => Genre.Name)" />
+            <InputText @bind-Value=CreateGenreModel.Name class="form-control" placeholder="Enter name">@CreateGenreModel.Name</InputText>
+            <ValidationMessage For="@(() => CreateGenreModel.Name)" />
         </div>
 
         <div class="form-group">
@@ -32,16 +34,32 @@ else
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Genre Genre { get; set; } = new Genre() { Name = string.Empty };
+    public CreateGenreDto CreateGenreModel { get; set; } = null!;
+
 
     protected override async Task OnInitializedAsync()
     {
-        Genre = await genreService.GetAsync(Id);
+        var genre = await genreService.GetAsync(Id);
+
+        if (genre == null)
+        {
+            return;
+        }
+
+        CreateGenreModel = new CreateGenreDto()
+            {
+                Name = genre.Name
+            };
     }
 
     public async Task OnFormSubmitAsync()
     {
-        await genreService.UpdateAsync(Id, Genre);
+        var genre = new Genre()
+            {
+                Name = CreateGenreModel.Name
+            };
+
+        await genreService.UpdateAsync(Id, genre);
         navigationManager.NavigateTo("/genres");
     }
 }

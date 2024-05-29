@@ -1,28 +1,29 @@
 ﻿@page "/authors/edit/{Id:int}";
+@using LibraryBlazor.DTOs.Create
 @inject IAuthorService authorService;
 @inject NavigationManager navigationManager;
 
 <h2 class="mb-3">Create author</h2>
 
-@if (Author == null)
+@if (CreateAuthorModel == null)
 {
     <p><em>Not found author with id: @Id</em></p>
 }
 else
 {
-    <EditForm Model="Author" FormName="createAuthor" OnValidSubmit="@OnFormSubmitAsync">
+    <EditForm Model="CreateAuthorModel" FormName="createAuthor" OnValidSubmit="@OnFormSubmitAsync">
         <DataAnnotationsValidator />
 
         <div class="form-group mb-3">
             <label>First Name</label>
-            <InputText @bind-Value=Author.FirstName class="form-control" placeholder="Enter first name">@Author.FirstName</InputText>
-            <ValidationMessage For="@(() => Author.FirstName)" />
+            <InputText @bind-Value=CreateAuthorModel.FirstName class="form-control" placeholder="Enter first name">@CreateAuthorModel.FirstName</InputText>
+            <ValidationMessage For="@(() => CreateAuthorModel.FirstName)" />
         </div>
 
         <div class="form-group mb-3">
             <label>Last Name</label>
-            <InputText @bind-Value=Author.LastName class="form-control" placeholder="Enter last name">@Author.LastName</InputText>
-            <ValidationMessage For="@(() => Author.LastName)" />
+            <InputText @bind-Value=CreateAuthorModel.LastName class="form-control" placeholder="Enter last name">@CreateAuthorModel.LastName</InputText>
+            <ValidationMessage For="@(() => CreateAuthorModel.LastName)" />
         </div>
 
         <div class="form-group">
@@ -39,16 +40,28 @@ else
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Author Author { get; set; } = new Author();
+    public CreateAuthorDto CreateAuthorModel { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {
-        Author = await authorService.GetAsync(Id);
+        var author = await authorService.GetAsync(Id);
+        CreateAuthorModel = new CreateAuthorDto()
+            {
+                Id = author.Id,
+                FirstName = author.FirstName,
+                LastName = author.LastName
+            };
     }
 
     public async Task OnFormSubmitAsync()
     {
-        await authorService.UpdateAsync(Id, Author);
+        var author = new Author()
+            {
+                Id = CreateAuthorModel.Id,
+                FirstName = CreateAuthorModel.FirstName,
+                LastName = CreateAuthorModel.LastName
+            };
+        await authorService.UpdateAsync(Id, author);
         navigationManager.NavigateTo("/authors");
     }
 }

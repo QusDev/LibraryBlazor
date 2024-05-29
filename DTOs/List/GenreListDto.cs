@@ -1,9 +1,9 @@
-﻿using LibraryBlazor.Entity.Entities;
+﻿using LibraryBlazor.Lookups;
 
 namespace LibraryBlazor.DTOs.List
 {
     public class GenreListDto
     {
-        public List<Genre> Genres { get; set; } = null!;
+        public List<GenreLookup> Genres { get; set; } = null!;
     }
 }
