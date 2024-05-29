@@ -1,15 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LibraryBlazor.Entity.Entities
+namespace LibraryBlazor.DTOs.Create
 {
-    public class Author
+    public class CreateAuthorDto
     {
         public int Id { get; set; }
 
+        [Required]
+        [MinLength(2)]
         public string FirstName { get; set; } = null!;
 
+        [Required]
+        [MinLength(2)]
         public string LastName { get; set; } = null!;
-
-        public List<Book> Books { get; } = [];
     }
 }
