@@ -1,10 +1,8 @@
 ﻿@page "/genres"
-@using LibraryBlazor.DTOs.List
-@using LibraryBlazor.Lookups
 @inject IGenreService genreService;
 @inject NavigationManager navigationManager;
 
-@if (genreList.Genres == null)
+@if (genreListDto.Genres == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -23,7 +21,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var genre in genreList.Genres)
+            @foreach (var genre in genreListDto.Genres)
             {
                 <tr score="row">
                     <td>@genre.Id</td>
@@ -42,11 +40,11 @@ else
 
 
 @code {
-    private GenreListDto genreList = new GenreListDto();
+    private GenreListDto genreListDto = new GenreListDto();
 
     protected override async Task OnInitializedAsync()
     {
-        genreList.Genres = (await genreService.GetAllAsync()).Select(g => new GenreLookup()
+        genreListDto.Genres = (await genreService.GetAllAsync()).Select(g => new GenreLookup()
             {
                 Id = g.Id,
                 Name = g.Name
@@ -56,7 +54,7 @@ else
     public async Task OnDelete(int genreId)
     {
         await genreService.DeleteAsync(genreId);
-        genreList.Genres = (await genreService.GetAllAsync()).Select(g => new GenreLookup()
+        genreListDto.Genres = (await genreService.GetAllAsync()).Select(g => new GenreLookup()
             {
                 Id = g.Id,
                 Name = g.Name

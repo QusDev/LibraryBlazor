@@ -14,7 +14,7 @@ namespace LibraryBlazor.Lookups
 
         public bool Available { get; set; }
 
-        public List<Author> Authors { get; set; } = [];
-        public List<Genre> Genres { get; set; } = [];
+        public List<AuthorLookup> Authors { get; set; } = [];
+        public List<GenreLookup> Genres { get; set; } = [];
     }
 }

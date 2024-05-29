@@ -1,8 +1,9 @@
 ﻿using LibraryBlazor.Entity.DbContexts;
 using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryBlazor.Services
+namespace LibraryBlazor.Services.Implementation
 {
     public class IssueService : IIsueService
     {
@@ -22,16 +23,6 @@ namespace LibraryBlazor.Services
 
             _libraryDbContext.Issues.Add(entity);
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
-        }
-
-        public Task AddBookToIssueAsync(int issueId, Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddReaderToIssueAsync(int issueId, Reader reader)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(int id)
@@ -63,7 +54,7 @@ namespace LibraryBlazor.Services
             issue.IssueDate = entity.IssueDate;
             issue.ReturnDate = entity.ReturnDate;
             issue.Returned = entity.Returned;
-            issue.BookId  = entity.BookId;
+            issue.BookId = entity.BookId;
             issue.ReaderId = entity.ReaderId;
 
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);

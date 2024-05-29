@@ -14,12 +14,12 @@ namespace LibraryBlazor.Entity.Configurations
             builder
                 .HasMany(b => b.Genres)
                 .WithMany(g => g.Books)
-                .UsingEntity<BookGenre>();
+                .UsingEntity("BookGenres");
 
             builder
                 .HasMany(b => b.Authors)
                 .WithMany(a => a.Books)
-                .UsingEntity<BookAuthor>();
+                .UsingEntity("BookAuthors");
         }
     }
 }

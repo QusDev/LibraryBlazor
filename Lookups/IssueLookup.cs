@@ -1,6 +1,4 @@
-﻿using LibraryBlazor.Entity.Entities;
-
-namespace LibraryBlazor.Lookups
+﻿namespace LibraryBlazor.Lookups
 {
     public class IssueLookup
     {

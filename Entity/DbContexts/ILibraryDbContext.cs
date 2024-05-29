@@ -10,8 +10,6 @@ namespace LibraryBlazor.Entity.DbContexts
         DbSet<Author> Authors { get; set; }
         DbSet<Reader> Readers { get; set; }
         DbSet<Issue> Issues { get; set; }
-        DbSet<BookGenre> BookGenres { get; set; }
-        DbSet<BookAuthor> BookAuthors { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

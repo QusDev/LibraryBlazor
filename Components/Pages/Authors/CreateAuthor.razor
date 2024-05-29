@@ -1,11 +1,10 @@
 ﻿@page "/authors/create";
-@using LibraryBlazor.DTOs.Create
 @inject IAuthorService authorService;
 @inject NavigationManager navigationManager;
 
-<h2 class="mb-3">Create author</h2>
+<h2 class="mb-3">Edit author</h2>
 
-<EditForm Model="CreateAuthorModel" FormName="createAuthor" OnValidSubmit="@OnFormSubmitAsync">
+<EditForm Model="CreateAuthorModel" FormName="editAuthor" OnValidSubmit="@OnFormSubmitAsync">
     <DataAnnotationsValidator />
 
     <div class="form-group mb-3">

@@ -1,11 +1,10 @@
 ﻿@page "/books/edit/{Id:int}";
-@using LibraryBlazor.DTOs.Create
 @inject IBookService bookService;
 @inject IGenreService genreService;
 @inject IAuthorService authorService;
 @inject NavigationManager navigationManager;
 
-<h2 class="mb-3">Create book</h2>
+<h2 class="mb-3">Edit book</h2>
 @if (CreateBookModel == null)
 {
     <p><em>Not found author with id: @Id</em></p>
@@ -13,7 +12,7 @@
 }
 else
 {
-    <EditForm Model="CreateBookModel" FormName="createBook" OnValidSubmit="@OnFormSubmitAsync">
+    <EditForm Model="CreateBookModel" FormName="editBook" OnValidSubmit="@OnFormSubmitAsync">
         <DataAnnotationsValidator />
 
         <div class="form-group mb-3">
@@ -98,8 +97,8 @@ else
                 CountPage = book.CountPage,
                 Publication_year = book.Publication_year,
                 Available = book.Available,
-                SelectedAuthorsId = bookService.GetAuthors(book.Id).Select(a => a.Id).ToArray(),
-                SelectedGenresId = bookService.GetGenres(book.Id).Select(g => g.Id).ToArray(),
+                SelectedAuthorsId = book.Authors.Select(a => a.Id).ToArray(),
+                SelectedGenresId = book.Genres.Select(g => g.Id).ToArray()
             };
 
         genres = await genreService.GetAllAsync();
@@ -113,12 +112,20 @@ else
                 Title = CreateBookModel.Title,
                 Publication_year = CreateBookModel.Publication_year,
                 CountPage = CreateBookModel.CountPage,
-                Available = CreateBookModel.Available
+                Available = CreateBookModel.Available,
             };
-        await bookService.UpdateAsync(Id, book);
 
-        await bookService.UpdateGenresAsync(Id, CreateBookModel.SelectedGenresId.ToList());
-        await bookService.UpdateAuthorsAsync(Id, CreateBookModel.SelectedAuthorsId.ToList());
+        foreach (var genreId in CreateBookModel.SelectedGenresId)
+        {
+            book.Genres.Add((await genreService.GetAsync(genreId))!);
+        }
+
+        foreach (var authorId in CreateBookModel.SelectedAuthorsId)
+        {
+            book.Authors.Add((await authorService.GetAsync(authorId))!);
+        }
+
+        await bookService.UpdateAsync(Id, book);
 
         navigationManager.NavigateTo("/books");
     }

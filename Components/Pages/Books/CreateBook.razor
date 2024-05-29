@@ -1,5 +1,4 @@
 ﻿@page "/books/create";
-@using LibraryBlazor.DTOs.Create
 @inject IBookService bookService;
 @inject IGenreService genreService;
 @inject IAuthorService authorService;
@@ -85,12 +84,22 @@
                 Title = CreateBookModel.Title,
                 Publication_year = CreateBookModel.Publication_year,
                 CountPage = CreateBookModel.CountPage,
-                Available = CreateBookModel.Available
+                Available = CreateBookModel.Available,
+                Genres = new List<Genre>(),
+                Authors = new List<Author>()
             };
-        await bookService.AddAsync(book);
 
-        await bookService.AddGenresToBookAsync(book.Id, CreateBookModel.SelectedGenresId.ToList());
-        await bookService.AddAuthorsToBookAsync(book.Id, CreateBookModel.SelectedAuthorsId.ToList());
+        foreach (var genreId in CreateBookModel.SelectedGenresId)
+        {
+            book.Genres.Add((await genreService.GetAsync(genreId))!);
+        }
+
+        foreach (var authorId in CreateBookModel.SelectedAuthorsId)
+        {
+            book.Authors.Add((await authorService.GetAsync(authorId))!);
+        }
+
+        await bookService.AddAsync(book);
 
         navigationManager.NavigateTo("/books");
     }

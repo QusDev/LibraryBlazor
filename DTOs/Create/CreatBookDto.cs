@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LibraryBlazor.Entity.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibraryBlazor.DTOs.Create
 {

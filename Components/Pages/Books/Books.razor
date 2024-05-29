@@ -1,10 +1,8 @@
 ﻿@page "/books"
-@using LibraryBlazor.DTOs.List
-@using LibraryBlazor.Lookups
 @inject IBookService bookService;
 @inject NavigationManager navigationManager;
 
-@if (booksDto.Books == null)
+@if (booksListDto.Books == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -28,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var book in booksDto.Books)
+            @foreach (var book in booksListDto.Books)
             {
                 <tr score="row">
                     <td>@book.Id</td>
@@ -62,34 +60,52 @@ else
 
 
 @code {
-    private BookListDto booksDto = new BookListDto();
+    private BookListDto booksListDto = new BookListDto();
 
     protected override async Task OnInitializedAsync()
     {
-        booksDto.Books = (await bookService.GetAllAsync()).Select(b => new BookLookup()
+        booksListDto.Books = (await bookService.GetAllAsync()).Select(b => new BookLookup()
             {
                 Id = b.Id,
                 Title = b.Title,
                 CountPage = b.CountPage,
                 Publication_year = b.Publication_year,
                 Available = b.Available,
-                Authors = bookService.GetAuthors(b.Id),
-                Genres = bookService.GetGenres(b.Id)
+                Authors = b.Authors.Select(a => new AuthorLookup()
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName
+                }).ToList(),
+                Genres = b.Genres.Select(g => new GenreLookup()
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList()
             }).ToList();
     }
 
     public async Task OnDelete(int bookId)
     {
         await bookService.DeleteAsync(bookId);
-        booksDto.Books = (await bookService.GetAllAsync()).Select(b => new BookLookup()
+        booksListDto.Books = (await bookService.GetAllAsync()).Select(b => new BookLookup()
             {
                 Id = b.Id,
                 Title = b.Title,
                 CountPage = b.CountPage,
                 Publication_year = b.Publication_year,
                 Available = b.Available,
-                Authors = bookService.GetAuthors(b.Id),
-                Genres = bookService.GetGenres(b.Id)
+                Authors = b.Authors.Select(a => new AuthorLookup()
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName
+                }).ToList(),
+                Genres = b.Genres.Select(g => new GenreLookup()
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToList()
             }).ToList();
     }
 

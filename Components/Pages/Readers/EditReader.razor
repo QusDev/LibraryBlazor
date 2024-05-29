@@ -1,9 +1,8 @@
 ﻿@page "/readers/edit/{Id:int}";
-@using LibraryBlazor.DTOs.Create
 @inject IReaderService readerService;
 @inject NavigationManager navigationManager;
 
-<h2 class="mb-3">Create reader</h2>
+<h2 class="mb-3">Edit reader</h2>
 
 @if (CreateReaderModel == null)
 {
@@ -11,7 +10,7 @@
 }
 else
 {
-    <EditForm Model="CreateReaderModel" FormName="createReader" OnValidSubmit="@OnFormSubmitAsync">
+    <EditForm Model="CreateReaderModel" FormName="editReader" OnValidSubmit="@OnFormSubmitAsync">
         <DataAnnotationsValidator />
 
         <div class="form-group mb-3">

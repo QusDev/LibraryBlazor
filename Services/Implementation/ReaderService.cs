@@ -1,8 +1,9 @@
 ﻿using LibraryBlazor.Entity.DbContexts;
 using LibraryBlazor.Entity.Entities;
+using LibraryBlazor.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LibraryBlazor.Services
+namespace LibraryBlazor.Services.Implementation
 {
     public class ReaderService : IReaderService
     {
