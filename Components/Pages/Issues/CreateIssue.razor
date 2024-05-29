@@ -1,0 +1,91 @@
+﻿@page "/issues/create";
+@using LibraryBlazor.DTOs.Create
+@inject IIsueService issueService;
+@inject IBookService bookService;
+@inject IReaderService readerService;
+@inject NavigationManager navigationManager;
+
+<h2 class="mb-3">Create issue</h2>
+
+<EditForm Model="CreateIssueModel" FormName="createIssue" OnValidSubmit="@OnFormSubmitAsync">
+    <DataAnnotationsValidator />
+
+    <div class="form-group mb-3">
+        <label>Issue date</label>
+        <InputDate TValue="@DateTime" @bind-Value=CreateIssueModel.IssueDate class="form-control">@CreateIssueModel.IssueDate</InputDate>
+        <ValidationMessage For="@(() => CreateIssueModel.IssueDate)" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Returned date</label>
+        <InputDate TValue="@DateTime" @bind-Value=CreateIssueModel.ReturnDate class="form-control">@CreateIssueModel.Returned</InputDate>
+        <ValidationMessage For="@(() => CreateIssueModel.Returned)" />
+    </div>
+
+    <div class="form-check mb-3">
+        <label>Returned</label>
+        <InputCheckbox @bind-Value=CreateIssueModel.Returned class="form-check-input">@CreateIssueModel.Returned</InputCheckbox>
+        <ValidationMessage For="@(() => CreateIssueModel.SelectedReaderId)" />
+    </div>
+
+    <div class="mb-4">
+        <label>Readers</label>
+        <InputSelect @bind-Value="CreateIssueModel.SelectedReaderId" class="form-select">
+            @foreach (var reader in readers)
+            {
+                <option value="@reader.Id">@reader.FirstName @reader.LastName</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => CreateIssueModel.SelectedReaderId)" />
+    </div>
+
+    <div class="mb-4">
+        <label>Books</label>
+        <InputSelect @bind-Value="CreateIssueModel.SelectedBookId" class="form-select">
+            @foreach (var book in books)
+            {
+                <option value="@book.Id">@book.Title</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => CreateIssueModel.SelectedBookId)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Submit</button>
+        <NavLink href="/issues"><button type="button" class="btn btn-danger">Cancel</button></NavLink>
+    </div>
+
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public CreateIssueDto CreateIssueModel { get; set; } = new CreateIssueDto();
+
+    private List<Reader> readers = new List<Reader>();
+    private List<Book> books = new List<Book>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        readers = await readerService.GetAllAsync();
+        books = await bookService.GetAllAsync();
+
+        CreateIssueModel.SelectedReaderId = readers.FirstOrDefault(new Reader() { Id = 1}).Id;
+        CreateIssueModel.SelectedBookId = books.FirstOrDefault(new Book() { Id = 1 }).Id;
+    }
+
+    public async Task OnFormSubmitAsync()
+    {
+        var issue = new Issue()
+            {
+                IssueDate = CreateIssueModel.IssueDate,
+                ReturnDate = CreateIssueModel.ReturnDate,
+                Returned = CreateIssueModel.Returned,
+                BookId = CreateIssueModel.SelectedBookId,
+                ReaderId = CreateIssueModel.SelectedReaderId
+            };
+
+        await issueService.AddAsync(issue);
+
+        navigationManager.NavigateTo("/issues");
+    }
+}

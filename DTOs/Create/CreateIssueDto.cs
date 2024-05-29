@@ -16,9 +16,9 @@ namespace LibraryBlazor.DTOs.Create
         public bool Returned { get; set; }
 
         [Required]
-        public int SelectedReaderId;
+        public int SelectedReaderId = -1;
 
         [Required]
-        public int SelectedBookId;
+        public int SelectedBookId = -1;
     }
 }

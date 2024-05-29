@@ -12,8 +12,8 @@ namespace LibraryBlazor.Lookups
 
         public bool Returned { get; set; }
 
-        public Reader Reader { get; set; } = null!;
+        public ReaderLookup Reader { get; set; } = null!;
 
-        public Book Book { get; set; } = null!;
+        public BookLookup Book { get; set; } = null!;
     }
 }

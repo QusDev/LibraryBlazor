@@ -20,9 +20,18 @@ namespace LibraryBlazor.Services
                 return;
             }
 
-
             _libraryDbContext.Issues.Add(entity);
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
+        }
+
+        public Task AddBookToIssueAsync(int issueId, Book book)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddReaderToIssueAsync(int issueId, Reader reader)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(int id)
@@ -38,7 +47,7 @@ namespace LibraryBlazor.Services
             await _libraryDbContext.SaveChangesAsync(CancellationToken.None);
         }
 
-        public async Task<List<Issue>> GetAllAsync() => await _libraryDbContext.Issues.ToListAsync();
+        public async Task<List<Issue>> GetAllAsync() => await _libraryDbContext.Issues.Include(i => i.Reader).Include(i => i.Book).ToListAsync();
 
         public async Task<Issue?> GetAsync(int id) => await _libraryDbContext.Issues.FirstOrDefaultAsync(x => x.Id == id);
 
